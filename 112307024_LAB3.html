@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>112307024_Lab3_Number Guessing Game</title>
+    <style>
+        #result {
+            margin-top: 20px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>112307024_Lab3_Number Guessing Game</h1>
+    <div id="result"></div>
+    <script>
+        // 隨機生成 2~99 之間的密碼
+        const targetNumber = Math.floor(Math.random() * 98) + 2;
+        let attemptsLeft = 7; // 剩餘次數
+        let rangeMin = 1; // 最小範圍
+        let rangeMax = 100; // 最大範圍
+        let userGuess = null;
+        const resultDiv = document.getElementById("result");
+
+        while (attemptsLeft > 0) {
+            // 提示使用者輸入
+            userGuess = window.prompt(`猜數字範圍是 ${rangeMin}~${rangeMax}，剩餘次數：${attemptsLeft}`);
+            
+            // 檢查是否為空值或非數字
+            if (userGuess === null || userGuess.trim() === "" || isNaN(userGuess)) {
+                alert("請輸入有效的數字！");
+                continue;
+            }
+
+            // 轉為整數
+            userGuess = parseInt(userGuess, 10);
+
+            // 檢查範圍
+            if (userGuess < rangeMin || userGuess > rangeMax) {
+                alert(`請輸入範圍內的數字 (${rangeMin}~${rangeMax})！`);
+                continue;
+            }
+
+            // 檢查答案
+            if (userGuess === targetNumber) {
+                alert("恭喜！你猜對了！");
+                resultDiv.innerHTML = `<img src="correct.jpg" alt="Correct!">`;
+                break;
+            } else if (userGuess < targetNumber) {
+                alert("猜得太低了！");
+                rangeMin = Math.max(rangeMin, userGuess + 1); // 更新最小範圍
+            } else {
+                alert("猜得太高了！");
+                rangeMax = Math.min(rangeMax, userGuess - 1); // 更新最大範圍
+            }
+
+            attemptsLeft--; // 減少剩餘次數
+        }
+
+        // 如果次數用完且未猜對
+        if (attemptsLeft === 0 && userGuess !== targetNumber) {
+            alert(`很遺憾！你已用完所有次數。正確答案是 ${targetNumber}。`);
+            resultDiv.innerHTML = `<img src="wrong.jpg" alt="Wrong!">`;
+        }
+    </script>
+</body>
+</html>
